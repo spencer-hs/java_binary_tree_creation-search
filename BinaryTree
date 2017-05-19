@@ -1,0 +1,96 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Project3{
+	
+//main method
+public static void main(String[] args) {
+//reads in file
+  Scanner scan = new Scanner(System.in);
+  String line = scan.nextLine();
+  String[] size = line.split("\\s+"); //splits by space
+
+  int data[] = new int[Integer.parseInt(size[0])]; //make 2 arrays, data & query
+  int query[] = new int[Integer.parseInt(size[1])];
+       
+  for(int i=0;i<data.length; i++){ //read into data array
+    data[i] = scan.nextInt(); }
+
+  for(int i=0; i<query.length; i++){  //read into query array
+    query[i] = scan.nextInt();}
+       
+  long s, e; 
+  s = System.currentTimeMillis();
+  
+  Tree tree_maker= new Tree();
+  for(int i=0; i<data.length; i++){ 
+    tree_maker.insert(data[i]);}  
+  
+  e = System.currentTimeMillis();
+
+  long prep_time = (e - s);
+       
+  System.out.println("Prep time: "+ prep_time + "ms");
+
+  long start, end;
+
+  // searching each query element
+  for(int i=0; i<query.length; i++){
+    
+    start = System.currentTimeMillis();
+    if(tree_maker.searcher(data[i]))
+      {System.out.println(query[i]+"true");}
+    
+    else { System.out.println(query[i]+"false");}
+    end = System.currentTimeMillis();
+           
+    long search_time = (end - start); 
+ 
+    System.out.println(query[i]+":"+ search_time +"ms"); }   
+           
+    scan.close();    
+           
+}}
+
+class Node { //defines a node, nodes have a left and a right
+    int key;
+    Node left;
+    Node right;  
+      
+  public Node(int key) {
+    this.key = key;}
+    }
+class Tree {  //tree class contains methods to update insert and search methods
+  Node root; //defines the node as a root
+  
+  public void insert(int key) {
+    Node leaf= new Node(key);
+      
+    if(root==null){ //if the roots empty, make the new leaf the root
+      leaf=root;}
+      else{
+         Node current=root;  //make a node that will move through the tree
+          while(true){
+            if(key<current.key){  //if key is smaller, it goes left 
+              if(current.left==null){
+                current.left=leaf;
+                return; 
+                 }else{current=current.left;}}
+               else{if(current.right==null){ //otherwise, it goes right
+                current.right=leaf;
+                return;}
+               else{current=current.right;}
+               }}}}
+               
+    public boolean searcher(int key) { //
+      Node lookerNode = root;           
+        while (lookerNode.key != key) {
+          if (key < lookerNode.key) { //checks key to the left
+            lookerNode = lookerNode.left;} 
+            else {
+              lookerNode = lookerNode.right; //checks right}
+                if (lookerNode == null){ //if the node checked is empty, 
+                  return false;}}
+                   return true; }}
+			
+   
